@@ -6,6 +6,9 @@ __pycache__/
 venv/
 env/
 
+# Trained models
+models/
+
 # Jupyter
 .ipynb_checkpoints/
 
