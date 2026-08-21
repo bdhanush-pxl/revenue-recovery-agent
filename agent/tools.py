@@ -1,6 +1,8 @@
 import pandas as pd
 import joblib
 
+from agent.guardrails import evaluate_action
+
 
 PAYMENTS_FILE = "data/payments.csv"
 MODEL_FILE = "models/recovery_predictor.joblib"
@@ -895,6 +897,51 @@ def verify_payment(
         "message":
             message,
     }
+
+
+
+def evaluate_recovery_action(
+    transaction_id: str,
+    proposed_action: str,
+):
+    """
+    Evaluate whether a proposed recovery action
+    passes all deterministic safety guardrails.
+
+    The LLM can request this check, but cannot
+    bypass the guardrails.
+    """
+
+    payment = get_payment_context(
+        transaction_id
+    )
+
+    if not payment["success"]:
+        return payment
+
+    bank = get_bank_health(
+        payment["bank"],
+        payment["timestamp"]
+    )
+
+    if not bank["success"]:
+        return bank
+
+    recovery = get_recovery_options(
+        transaction_id
+    )
+
+    if not recovery["success"]:
+        return recovery
+
+    decision = evaluate_action(
+        payment,
+        recovery,
+        bank,
+        proposed_action=proposed_action,
+    )
+
+    return decision
 
 
 if __name__ == "__main__":

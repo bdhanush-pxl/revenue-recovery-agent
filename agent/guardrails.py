@@ -84,12 +84,15 @@ def evaluate_action(
             "VERY_LOW_RECOVERY_PROBABILITY"
         )
 
-        blocking_reasons.append(
-            (
-                "Predicted recovery probability "
-                "is below 10%."
+        # ESCALATE is a human-review pathway,
+        # not an automatic payment recovery action.
+        if proposed_action != "ESCALATE":
+            blocking_reasons.append(
+                (
+                    "Predicted recovery probability "
+                    "is below 10%."
+                )
             )
-        )
 
     # ==================================================
     # 2. Permanent failure
@@ -156,6 +159,16 @@ def evaluate_action(
             "REPEATED_ATTEMPTS"
         )
 
+
+    # ==================================================
+    # Execution mode
+    # ==================================================
+
+    if proposed_action == "ESCALATE":
+        execution_mode = "HUMAN_REVIEW"
+    else:
+        execution_mode = "AUTOMATIC"
+
     # ==================================================
     # Final decision
     # ==================================================
@@ -196,6 +209,8 @@ def evaluate_action(
     return {
 
         "allowed": allowed,
+
+        "execution_mode": execution_mode,
 
         "risk_level": risk_level,
 
