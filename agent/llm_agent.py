@@ -358,6 +358,15 @@ IMPORTANT SAFETY RULES:
 - Clearly distinguish tool-derived facts from
   inference.
 
+- ALL monetary amounts are in Indian Rupees (INR).
+
+- ALWAYS display monetary amounts using the ₹ symbol.
+
+- NEVER use $, USD, or dollar notation.
+
+- Do not convert or alter monetary values returned
+  by the tools.
+
 - After an automatic execution, always verify
   whether recovery actually occurred.
 
@@ -393,6 +402,16 @@ EXECUTION RULES:
 IMPORTANT:
 The LLM must never infer execution success.
 Execution status and verification status must come from tools.
+
+
+OUTPUT FORMAT RULES:
+
+- This is an India-based payment recovery system.
+- All monetary values must be displayed in INR.
+- Always use the ₹ symbol.
+- Example: ₹10,641.08
+- Never write $10,641.08 or USD 10,641.08.
+- Use the exact monetary value returned by the tools.
 
 
 Your final response must contain:
